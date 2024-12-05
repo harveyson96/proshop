@@ -1,0 +1,30 @@
+{
+  "name": "proshop",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "eCommerce application built with MERN",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm start --prefix frontend\" \"nodemon backend/server.js\" ",
+    "data:import": "node backend/seeder.js",
+    "data:destory": "node backend/seeder.js -d"
+  },
+  "author": "Harvey Sun",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "color": "^4.2.3",
+    "colors": "^1.4.0",
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "dotenv": "^16.4.7",
+    "env": "^0.0.2",
+    "mongoose": "^8.8.3",
+    "nodemon": "^3.1.7"
+  }
+}
