@@ -3,7 +3,9 @@ import React from "react";
 import { Col, Row } from "react-bootstrap";
 // import axios from "axios";
 import Product from "../components/Product";
-import { useGetProductsQuery } from "../slices/productApiSlice";
+import { useGetProductsQuery } from "../slices/productsApiSlice";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
 const HomeScreen = () => {
   // const [products, setProducts] = useState([]);
@@ -18,8 +20,10 @@ const HomeScreen = () => {
   return (
     <>
       {isLoading ? (
-        <h2>Is Loading</h2>
-      ) : error? (<div>{error?.data.massage || error.error}</div>): (
+        <Loader />
+      ) : error ? (
+       <Message>{error?.message || error.data?.message}</Message>
+      ) : (
         <>
           <h1>Latest Product</h1>
           <Row>

@@ -6,7 +6,6 @@ const Product = ({product}) => {
   return (
     <>
 <Card className="my-3 p-3 rounded" >
-Change a to Link to prevent full page reloads
     <Link to={`/product/${product._id}`}>
         <Card.Img src={product.image} variant="top" alt={product.name}/>
     </Link>
