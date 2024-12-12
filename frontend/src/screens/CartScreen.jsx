@@ -1,6 +1,6 @@
 import React from "react";
 import { FaTrash } from "react-icons/fa";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Row,
   Col,
@@ -24,9 +24,9 @@ const CartScreen = () => {
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));
   };
-  const checkouHandler = () =>{
-    navigate('/login?redirect=/shipping')
-  }
+  const checkouHandler = () => {
+    navigate("/login?redirect=/shipping");
+  };
   return (
     <>
       <Row>

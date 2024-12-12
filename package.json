@@ -19,7 +19,9 @@
     "bcryptjs": "^2.4.3",
     "color": "^4.2.3",
     "colors": "^1.4.0",
+    "cookie-parser": "^1.4.7",
     "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
     "react-redux": "^9.1.2"
   },
   "devDependencies": {
