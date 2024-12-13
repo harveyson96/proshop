@@ -105,7 +105,7 @@ const CartScreen = () => {
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Button className="btn-block" type="button">
+                <Button className="btn-block" type="button" onClick={checkouHandler}>
                   Proceed to Checkout
                 </Button>
               </ListGroup.Item>

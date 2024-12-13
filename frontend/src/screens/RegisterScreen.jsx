@@ -4,18 +4,20 @@ import FormContainer from "../components/FormContainer";
 import { Button, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
-import { useLoginMutation } from "../slices/usersApiSlice";
+import { useRegisterMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/usersSlice";
 import { toast } from "react-toastify";
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [register, { isLoading }] = useRegisterMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -36,21 +38,35 @@ const LoginScreen = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    try {
-      // send login request to API and
-      // unwrap here only returns the data(or throw an error) from the resolved promise object
-      const res = await login({ email, password }).unwrap();
-      // use dispatch to store the userInfo in state
-      dispatch(setCredentials({ ...res }));
-      navigate(redirect);
-    } catch (error) {
-      toast.error(error?.data?.message || error.error);
+    if (password !== confirmPassword) {
+      toast.error("password does not match");
+    } else {
+      try {
+        // send login request to API and
+        // unwrap here only returns the data(or throw an error) from the resolved promise object
+        const res = await register({ name, email, password }).unwrap();
+        console.log('resgister returns: ', res)
+        // use dispatch to store the userInfo in state
+        dispatch(setCredentials({ ...res }));
+        navigate(redirect);
+      } catch (error) {
+        toast.error(error?.data?.message || error.error);
+      }
     }
   };
   return (
     <FormContainer>
-      <h1>Sign In</h1>
+      <h1>Sign Up</h1>
       <Form onSubmit={submitHandler}>
+        <Form.Group controlId="name" className="my-3">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            value={name}
+            placeholder="Enter Name"
+            type="text"
+            onChange={(e) => setName(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
         <Form.Group controlId="email" className="my-3">
           <Form.Label>Email Address</Form.Label>
           <Form.Control
@@ -69,24 +85,33 @@ const LoginScreen = () => {
             onChange={(e) => setPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
+        <Form.Group controlId="confirmPassword" className="my-3">
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            value={confirmPassword}
+            placeholder="Confirm Password"
+            type="password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
         <Button
           type="submit"
           variant="primary"
           className="mt-2"
           disabled={isLoading}
         >
-          Sign in
+          Register
         </Button>
         {isLoading && <Loader />}
       </Form>
       <Row md={3}>
-        New Customer?{" "}
-        <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
-          Creat an account
+        Already have an account?{" "}
+        <Link to={redirect ? `/login?redirect=${redirect}` : "/login"}>
+          Login
         </Link>
       </Row>
     </FormContainer>
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;
