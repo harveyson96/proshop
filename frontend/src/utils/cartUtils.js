@@ -13,7 +13,9 @@ export const updateCart = (state) => {
   state.taxPrice = addDecimals(state.itemsPrice * 0.15);
   //total price
   state.totalPrice = addDecimals(
-    state.itemsPrice + state.shippingPrice + state.taxPrice
+    parseFloat(state.itemsPrice || 0) +
+      parseFloat(state.shippingPrice || 0) +
+      parseFloat(state.taxPrice || 0)
   );
 
   //save on local storage

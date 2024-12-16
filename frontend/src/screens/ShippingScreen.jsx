@@ -14,7 +14,9 @@ const ShippingScreen = () => {
 
   const [address, setAddress] = useState(shippingAddress?.address || "");
   const [city, setCity] = useState(shippingAddress?.city || "");
-  const [zipcode, setZipcode] = useState(shippingAddress?.zipcode || "");
+  const [postalCode, setPostalCode] = useState(
+    shippingAddress?.postalCode || ""
+  );
   const [state, setState] = useState(shippingAddress?.state || "");
   const [country, setCountry] = useState(shippingAddress?.country || "");
   const submitHandler = (e) => {
@@ -23,7 +25,7 @@ const ShippingScreen = () => {
       saveShippingAddress({
         address,
         city,
-        zipcode,
+        postalCode,
         state,
         country,
       })
@@ -78,10 +80,10 @@ const ShippingScreen = () => {
         <Form.Group controlId="zipcode" className="my-3">
           <Form.Label>Postal Code</Form.Label>
           <Form.Control
-            value={zipcode}
-            placeholder="zipcode"
+            value={postalCode}
+            placeholder="postal Code"
             type="text"
-            onChange={(e) => setZipcode(e.target.value)}
+            onChange={(e) => setPostalCode(e.target.value)}
           ></Form.Control>
         </Form.Group>
         <Button type="submit" variant="primary" className="my-2">
