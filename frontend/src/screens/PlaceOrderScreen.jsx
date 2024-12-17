@@ -1,4 +1,4 @@
-import React, { Children, useEffect } from "react";
+import React, { useEffect } from "react";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
@@ -30,12 +30,12 @@ const PlaceOrderScreen = () => {
         paymentMethod: cart.paymentMethod,
         paymentResult: cart.paymentMethod,
         taxPrice: cart.taxPrice,
-        itemPrice: cart.itemPrice,
+        itemPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
         totalPrice: cart.totalPrice,
       }).unwrap();
       dispatch(clearCartItems());
-      navigate(`orders/${res._id}`);
+      navigate(`/order/${res._id}`);
     } catch (error) {
       toast.error(error);
     }
@@ -120,7 +120,11 @@ const PlaceOrderScreen = () => {
                 )}
               </ListGroup.Item>
               <ListGroup.Item>
-                <Button className="btn-block" onClick={placeOrderHandler}>
+                <Button
+                  className="btn-block"
+                  onClick={placeOrderHandler}
+                  disabled={cart.cartItems.length === 0}
+                >
                   Place Order
                 </Button>
                 {isLoading && <Loader />}
