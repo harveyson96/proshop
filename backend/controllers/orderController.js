@@ -30,6 +30,7 @@ const createOrder = asyncHandler(async (req, res) => {
   } else {
     const order = new Order({
       user: req.user._id,
+      createdAt: Date.now(),
       orderItems: orderItems.map((item) => ({
         _id: undefined,
         ...item,
@@ -52,7 +53,10 @@ const createOrder = asyncHandler(async (req, res) => {
 //@route  GET /api/orders/myorders
 //@access private
 const getMyOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ user: req.params.id });
+  // Get orders for the authenticated user
+  const orders = await Order.find({ user: req.user._id });
+
+  // Return the orders in the response
   res.status(200).json(orders);
 });
 //@desc fetch single order

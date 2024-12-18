@@ -103,7 +103,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       isAdmin: updatedUser.isAdmin,
     });
   } else {
-    res.status(400);
+    res.status(404);
     throw new Error("update user invalid");
   }
 });
