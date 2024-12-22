@@ -6,7 +6,7 @@ import Order from "../models/orderModel.js";
 //@route  GET /api/orders
 //@access private/admin
 const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({}); //find all
+  const orders = await Order.find({}).populate("user", "id name"); //find all
   res.status(200).json(orders);
 });
 //@desc create a new order
@@ -100,7 +100,13 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 //@route  PUT /api/orders/:id/delivered
 //@access private/admin
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
-  res.json("delivered orders");
+  const order = await Order.findById(req.params.id);
+  if (order) {
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+    const updatedOrder = await order.save();
+    res.status(201).json(updatedOrder);
+  }
 });
 export {
   getMyOrders,

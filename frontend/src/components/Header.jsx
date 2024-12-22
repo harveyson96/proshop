@@ -16,22 +16,23 @@ import { logOut } from "../slices/usersSlice";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import Loader from "./Loader";
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
 
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const [logoutApiCall, isLoading] = useLogoutMutation()
-  const logoutHandler = async() =>{
-    try{
-      await logoutApiCall().unwrap()
-      dispatch(logOut())
-      navigate('/login')
-    }catch(error){
-      toast.error(error?.error|| error?.data?.message)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [logoutApiCall, isLoading] = useLogoutMutation();
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logOut());
+      navigate("/login");
+    } catch (error) {
+      toast.error(error?.error || error?.data?.message);
     }
-  }
+  };
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
@@ -59,7 +60,7 @@ const Header = () => {
                       Profile
                     </NavDropdown.Item>
                     <NavDropdown.Item onClick={logoutHandler}>
-                      Logout
+                      Logout {isLoading && <Loader />}
                     </NavDropdown.Item>
                   </NavDropdown>
                 </>
@@ -68,6 +69,19 @@ const Header = () => {
                   <FaUser />
                   Sign in
                 </Nav.Link>
+              )}
+              {userInfo.isAdmin && (
+                <NavDropdown title="admin" id="adminmenu">
+                  <NavDropdown.Item as={Link} to="/admin/productlist">
+                    Products
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/admin/userlist">
+                    Users
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/admin/orderlist">
+                    Orders
+                  </NavDropdown.Item>
+                </NavDropdown>
               )}
             </Nav>
           </Navbar.Collapse>

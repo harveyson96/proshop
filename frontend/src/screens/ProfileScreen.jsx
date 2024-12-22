@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form, List, Row, Col, Button, Table } from "react-bootstrap";
+import { Form, Row, Col, Button, Table } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { useUpdateProfileMutation } from "../slices/usersApiSlice";
 import { useGetMyOrdersQuery } from "../slices/ordersApiSlice";
@@ -29,7 +29,7 @@ const ProfileScreen = () => {
       setName(userInfo.name);
       setEmail(userInfo.email);
     }
-  }, [userInfo.name, userInfo.email]);
+  }, [userInfo, userInfo.name, userInfo.email]);
   async function submitHandler(e) {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -115,7 +115,7 @@ const ProfileScreen = () => {
               {myOrders.map((order, index) => (
                 <tr key={index}>
                   <td>{order._id}</td>
-                  <td>{order.createdAt?.slice(0, 10) || ''}</td>
+                  <td>{order.createdAt?.slice(0, 10) || ""}</td>
                   <td>{order.totalPrice}</td>
                   <td>
                     {order.isPaid ? (
