@@ -70,7 +70,7 @@ const Header = () => {
                   Sign in
                 </Nav.Link>
               )}
-              {userInfo.isAdmin && (
+              {userInfo?.isAdmin && (
                 <NavDropdown title="admin" id="adminmenu">
                   <NavDropdown.Item as={Link} to="/admin/productlist">
                     Products
