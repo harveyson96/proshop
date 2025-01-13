@@ -1,5 +1,6 @@
 import React from "react";
-import { Row, Col, Table, Button, Image } from "react-bootstrap";
+import { Row, Col, Table, Button } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 import {
   useGetProductsQuery,
   useCreateProductMutation,
@@ -10,16 +11,17 @@ import Loader from "../../components/Loader";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Paginate from "../../components/Paginate";
 const ProductListScreen = () => {
   //   const userInfo = useSelector((state) => state.auth);
-
+  const { pageNumber } = useParams();
   const {
-    data: prodcuts,
+    data,
     refetch,
     isLoading: loadingProduct,
     error: errorProduct,
-  } = useGetProductsQuery();
-  console.log(prodcuts);
+  } = useGetProductsQuery({ pageNumber });
+
   const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
   const [deleteProduct, { isLoading: loadingDelete }] =
@@ -72,19 +74,20 @@ const ProductListScreen = () => {
           {errorProduct?.error || errorProduct?.data?.message}
         </Message>
       ) : (
-        <Table>
-          <thead>
-            {/* <th>Image</th> */}
-            <th>NAME</th>
-            <th>ID</th>
-            <th>CATEGORY</th>
-            <th>INVENTORY</th>
-            <th>PRICE</th>
-          </thead>
-          <tbody>
-            {prodcuts.map((product) => (
-              <tr key={product._id}>
-                {/* <td>
+        <>
+          <Table>
+            <thead>
+              {/* <th>Image</th> */}
+              <th>NAME</th>
+              <th>ID</th>
+              <th>CATEGORY</th>
+              <th>INVENTORY</th>
+              <th>PRICE</th>
+            </thead>
+            <tbody>
+              {data.products.map((product) => (
+                <tr key={product._id}>
+                  {/* <td>
                   <Image
                     src={`${product.image}`}
                     style={{
@@ -94,30 +97,36 @@ const ProductListScreen = () => {
                     }}
                   />
                 </td> */}
-                <td>{product.name}</td>
-                <td>{product._id}</td>
-                <td>{product.category}</td>
-                <td>{product.countInStock}</td>
-                <td>{product.price}</td>
-                <td>
-                  <Link to={`/admin/product/${product._id}/edit`}>
-                    <Button variant="light">
-                      <FaEdit />
+                  <td>{product.name}</td>
+                  <td>{product._id}</td>
+                  <td>{product.category}</td>
+                  <td>{product.countInStock}</td>
+                  <td>{product.price}</td>
+                  <td>
+                    <Link to={`/admin/product/${product._id}/edit`}>
+                      <Button variant="light">
+                        <FaEdit />
+                      </Button>
+                    </Link>
+                  </td>
+                  <td>
+                    <Button
+                      variant="danger"
+                      onClick={() => deleteHandler(product._id)}
+                    >
+                      <FaTrash />
                     </Button>
-                  </Link>
-                </td>
-                <td>
-                  <Button
-                    variant="danger"
-                    onClick={() => deleteHandler(product._id)}
-                  >
-                    <FaTrash />
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Paginate
+            page={data.page}
+            pages={data.pages}
+            isAdmin={true}
+          />
+        </>
       )}
     </>
   );

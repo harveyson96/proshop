@@ -5,8 +5,16 @@ import Product from "../models/productModel.js";
 //@route  GET /api/products
 //@access private
 const getProduct = asyncHandler(async (req, res) => {
-  const products = await Product.find({}); //find all
-  res.json(products);
+  const pageSize = 1;
+  const page = Number(req.query.pageNumber) || 1;
+  const keyword = req.query.keyword
+    ? { name: { $regex: req.query.keyword, $options: "i" } } // case insensitive
+    : {};
+  const count = await Product.countDocuments({ ...keyword });
+  const products = await Product.find({ ...keyword })
+    .limit(pageSize)
+    .skip((page - 1) * pageSize);
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 //@desc fetch single products
 //@route  GET /api/products/:id
@@ -79,11 +87,55 @@ const deleteProduct = asyncHandler(async (req, res) => {
     throw new Error("Product not found");
   }
 });
+//@desc create product review
+//@route  PUT /api/products/:id/reviews
+//@access admin/private
+const createProductReview = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  const { rating, comment } = req.body;
 
+  if (product) {
+    const alreadyReviewed = product.reviews.find(
+      (review) => review.user.toString() === req.user._id.toString()
+    );
+    if (alreadyReviewed) {
+      res.status(404);
+      throw new Error("Review already posted");
+    }
+    const review = {
+      name: req.user.name,
+      comment: comment,
+      rating: Number(rating),
+      user: req.user._id,
+    };
+    product.reviews.push(review);
+
+    product.numReviews = product.reviews.length;
+
+    product.rating =
+      product.reviews.reduce((acc, review) => acc + review.rating, 0) /
+      product.numReviews;
+    await product.save();
+    res.status(201).json({ message: "New review added" });
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+});
+
+//@desc fetch top rated products
+//@route  GET /api/products/top
+//@access private
+const getTopProducts = asyncHandler(async (req, res) => {
+  const topProducts = await Product.find({}).sort({ rating: -1 }).limit(3);
+  res.status(200).json(topProducts);
+});
 export {
   getProduct,
   getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
+  createProductReview,
+  getTopProducts,
 };

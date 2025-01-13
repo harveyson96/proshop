@@ -16,6 +16,7 @@ import { logOut } from "../slices/usersSlice";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import SearchBox from "./SearchBox";
 import Loader from "./Loader";
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -44,6 +45,7 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse>
             <Nav className="ms-auto">
+              <SearchBox />
               <NavLink href="/cart">
                 <FaShoppingCart />
                 Cart

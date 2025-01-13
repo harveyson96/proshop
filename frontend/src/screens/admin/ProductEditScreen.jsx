@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import FormContainer from "../../components/FormContainer";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import { Row, Col, Container, Card, Form, Button } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import {
   useGetProductDetailsQuery,
   useUpdateProductMutation,
