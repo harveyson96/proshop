@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import SearchBox from "./SearchBox";
 import Loader from "./Loader";
+import { resetCart } from "../slices/cartSlice";
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
@@ -29,6 +30,7 @@ const Header = () => {
     try {
       await logoutApiCall().unwrap();
       dispatch(logOut());
+      dispatch(resetCart());
       navigate("/login");
     } catch (error) {
       toast.error(error?.error || error?.data?.message);

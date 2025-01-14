@@ -14,9 +14,6 @@ const port = process.env.PORT || 5000;
 const app = express();
 connectDB(); // connect to MongoDB
 
-app.get("/", (req, res) => {
-  res.send("API is running");
-});
 app.use(cookieParser());
 // body parser middleware
 app.use(express.json());
@@ -32,6 +29,18 @@ app.use("/api/upload", uploadRoutes);
 const __dirname = path.resolve(); // set to current directory
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
+if (process.env.NODE_ENV === "production") {
+  //set static folder
+  app.use(express.static(path.join(__dirname, "/frontend/build")));
+  //any route is not api will redirect to index.html
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running");
+  });
+}
 app.use(errorHandler);
 app.use(notFound);
 app.listen(port, () => {

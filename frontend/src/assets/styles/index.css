@@ -43,11 +43,10 @@ table th {
   margin-top: 10px;
 }
 
-.carousel-caption {
+.carousel-caption-custom {
   position: absolute;
   width: 100%;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 0% !important;
   background: rgba(0, 0, 0, 0.5);
+  
 }

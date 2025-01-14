@@ -72,10 +72,12 @@ const ProductScreen = () => {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <Message>{error?.message || error.data?.message}</Message>
+        <Message variant="danger">
+          {error?.error || error.data?.message}
+        </Message>
       ) : (
         <>
-        <Meta title={product.name}/>
+          <Meta title={product.name} />
           <Row>
             <Col md={5}>
               <Image src={product.image} alt={product.name} fluid />
